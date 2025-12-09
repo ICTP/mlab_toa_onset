@@ -81,9 +81,18 @@ class DLIM:
             self.b_coef = self._get_b_coef(self.half_width)
 
         self.data = data
+        
+        if len(self.data) < len(self.dydx2_coef):  # señal menor que FIR
+            return np.nan, np.nan
+
+        if np.all(self.data == 0):  # no hay señal útil
+            return np.nan, np.nan
 
         # Step 1: Find coarse t0 using second derivative FIR
         t0_sample = self._fir_second_derivative()
+        
+        if not np.isfinite(t0_sample) or t0_sample <= 0:
+            return np.nan, np.nan
 
         # Step 2: Compute fine interpolation if possible
         if t0_sample > self.width:
@@ -227,7 +236,7 @@ class DLIM:
     # ------------------------------------------------------------------
     # Plot
     # ------------------------------------------------------------------    
-    def plot(self, data, sampling_frequency_hz=None, window=None, mode='normal'):
+    def plot(self, data, sampling_frequency_hz=None, window=None, mode='normal', ylim=None, xlim=None):
         """Plot the input pulse, second derivative, maximum derivative position
         and estimated t0.
 
@@ -265,7 +274,11 @@ class DLIM:
             plt.title(f"DLIM Onset Detection (t0 = {t0_est:.2f} samples, {t0_ns:.1f} ns)")
         else:
             plt.title(f"DLIM Onset Detection (t0 = {t0_est:.2f} samples)")
-
+        
+        if ylim != None:
+            plt.ylim(ylim)
+        if xlim != None:
+            plt.xlim(xlim)
         plt.legend()
         plt.grid()
         plt.xlabel("Samples")
@@ -379,8 +392,6 @@ class DCFD:
 
         plt.figure(figsize=(10, 6))
         plt.plot(data, label="Input Pulse", linewidth=2)
-        plt.plot(frac, label="Fraction Scaled Pulse")
-        plt.plot(delayed, label=f"Delayed Pulse (delay={self.delay})", alpha=0.7)
         plt.plot(diff, label="CFD Difference", linestyle='--')
 
         # Mark results

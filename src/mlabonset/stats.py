@@ -67,9 +67,6 @@ class PulseStatistics:
         """
         self._require_simulation("evaluate_single")
 
-        if true_t0 is None:
-            raise ValueError("true_t0 must be provided when simulation=True.")
-
         if not isinstance(pulse_row, (dict, pd.Series)):
             raise TypeError(
                 f"pulse_row must be dict or pd.Series with 'pulse' field. "
@@ -92,9 +89,11 @@ class PulseStatistics:
             )
         
         pulse = pulse_row["pulse"]
-
+        if true_t0 is None:
+            true_t0 = pulse_row["t0"]
+        
         t0_est = detect_func(pulse, **kwargs)
-
+        
         valid = np.isfinite(t0_est) and t0_est > 0
         if not valid:
             return {
@@ -128,9 +127,6 @@ class PulseStatistics:
             pandas.DataFrame: dataset + supervised statistics.
         """
         self._require_simulation("evaluate_dataset")
-
-        if true_t0 is None:
-            raise ValueError("true_t0 must be provided when simulation=True.")
 
         results = Parallel(n_jobs=self.n_jobs)(
             delayed(self.evaluate_single)(row, detect_func, true_t0, **kwargs)
