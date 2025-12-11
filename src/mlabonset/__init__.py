@@ -13,6 +13,9 @@ from .stats import (
     PulseStatistics,
     plot_overlaid_histograms,
     compare_methods,
+    label_and_create_dataset,
+    plot_relacion_acc_pre,
+    dlim_window_scan,
 )
 
 __all__ = [
@@ -21,6 +24,9 @@ __all__ = [
     "DCFD",
     "DLED",
     "PulseStatistics",
-    "plot_overlaid_histograms"
-    "compare_methods"
+    "plot_overlaid_histograms",
+    "compare_methods",
+    "label_and_create_dataset",
+    "plot_relacion_acc_pre",
+    "dlim_window_scan"
 ]
