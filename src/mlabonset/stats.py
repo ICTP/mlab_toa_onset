@@ -30,7 +30,7 @@ class PulseStatistics:
     All onset detection methods must be passed as callables.
     """
 
-    def __init__(self, n_jobs: int = -2, simulation: bool = True):
+    def __init__(self, n_jobs: int = -2, round_decimals: int = 2, simulation: bool = True):
         """Initialize the statistics engine.
 
         Args:
@@ -41,6 +41,7 @@ class PulseStatistics:
         """
         self.n_jobs = n_jobs
         self.simulation = simulation
+        self.decimals = round_decimals
 
     # ----------------------------------------------------------------------
     # SUPERVISED ANALYSIS (only if simulation=True)

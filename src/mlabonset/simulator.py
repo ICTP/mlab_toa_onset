@@ -212,6 +212,7 @@ class PulseSimulator:
             pulse = self._add_noise(sigma, pulse)
 
         pulse = self._apply_saturation(pulse)
+        
 
         return pulse
 
@@ -572,6 +573,8 @@ class PulseSimulator:
                     if key == 'snr':
                         log_val = np.random.uniform(value[0], value[1])
                         param_dict[key] = 10 ** log_val
+                    elif key == 'amplitude' and self.output_mode == OutputMode.ADC:
+                        param_dict[key] = int(np.random.uniform(value[0], value[1]))
                     else:
                         param_dict[key] = np.random.uniform(value[0], value[1])
                 else:
