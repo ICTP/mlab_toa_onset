@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "caen-parse"
+version = "0.1.0"
+description = "Parser for CAEN WaveCatcher ASCII .dat files"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.22",
+  "matplotlib>=3.5",
+  "fixedpoint>=1.0.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["caenParse*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
